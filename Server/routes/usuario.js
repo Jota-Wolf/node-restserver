@@ -2,11 +2,15 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
+const {
+  verificaToken,
+  verificaAdminRole,
+} = require("../middlewares/authetication");
 const app = express();
 
 //URLS
 //LISTAR TODOOS LOS USUARIOS
-app.get("/usuarios", (req, res) => {
+app.get("/usuarios", verificaToken, (req, res) => {
   //existen parametros opcionales y se guardan dentro del objeto query del request
   //el parametro opcional se ingresa en la url como ?parametro
   //ej. localhost:3000/usuarios?desde=10
@@ -52,7 +56,7 @@ app.get("/usuarios", (req, res) => {
 });
 
 //CREAR USUARIO
-app.post("/usuarios", (req, res) => {
+app.post("/usuarios", verificaToken, (req, res) => {
   //estoy obteniendo toda la info que viene del post con el objeto body de la request req.body
   let body = req.body;
 
@@ -83,7 +87,7 @@ app.post("/usuarios", (req, res) => {
 });
 
 //ACTUALIZAR USUARIO
-app.put("/usuarios/:id", (req, res) => {
+app.put("/usuarios/:id", [verificaToken, verificaAdminRole], (req, res) => {
   //el params.id hace referencia al id de la url /usuarios/:"id"
   let id = req.params.id;
   //Con la libreria UNDERSCORE _ puedo filtrar que campos quiero que se puedan modificar o no
@@ -115,7 +119,7 @@ app.put("/usuarios/:id", (req, res) => {
 });
 
 //BORRADO LOGICO USUARIO
-app.delete("/usuarios/:id", (req, res) => {
+app.delete("/usuarios/:id", [verificaToken, verificaAdminRole], (req, res) => {
   let id = req.params.id;
 
   let cambiaEstado = {

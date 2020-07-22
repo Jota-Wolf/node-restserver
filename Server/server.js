@@ -15,8 +15,9 @@ const colors = require("colors");
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
-//Importo y uso las rutas de usuarios definidas en el archivo usuario.js de la carpeta routesOcontrollers
-app.use(require("./routes/usuario"));
+//Importo la configuracion global de rutas 
+app.use(require("./routes/index"));
+
 //conexion a base de datos mongo
 mongoose.connect(
   process.env.URLDB,
