@@ -4,6 +4,7 @@
 require("./config/config");
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const app = express();
 //Este paquete body-parser que permite procesar la informacion que viene de un post o put o delete
 // y la serializa en on objeto JSON
@@ -15,7 +16,13 @@ const colors = require("colors");
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
-//Importo la configuracion global de rutas 
+
+//Habilitar la carpeta public para que sea publico ese directorio
+//Importo la libreria path que me va servir para que la ruta de public quede
+//de forma adecuada
+app.use(express.static(path.resolve(__dirname, "../public")));
+
+//Importo la configuracion global de rutas
 app.use(require("./routes/index"));
 
 //conexion a base de datos mongo
